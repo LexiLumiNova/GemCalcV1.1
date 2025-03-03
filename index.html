@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gematria Calculator</title>
+</head>
+<body>
+  <h1>Gematria Calculator</h1>
+  <input type="text" id="input" placeholder="Enter a word or phrase">
+  <button onclick="calculateGematria()">Calculate</button>
+  <p id="result"></p>
+
+  <script>
+    function calculateGematria() {
+      try {
+        const input = document.getElementById("input").value;
+        const validation = validateInput(input);
+
+        if (!validation.valid) {
+          alert(validation.message);
+          return;
+        }
+
+        const gematriaValue = calculateGematriaValue(input);
+        const result = `Gematria Value: ${gematriaValue}`;
+
+        if (validation.probane) {
+          result += " (Contains profane language)";
+        }
+
+        document.getElementById("result").innerHTML = result;
+      } catch (error) {
+        handleError(error);
+      }
+    }
+
+    function validateInput(input) {
+      const bannedTerms = ["mockBannedTerm1", "mockBannedTerm2"];
+      const profaneLanguage = ["mockProfaneWord1", "mockProfaneWord2"];
+
+      if (input.length > 255) {
+        return { valid: false, message: "Input exceeds 255 characters." };
+      }
+
+      if (bannedTerms.some(term => input.includes(term))) {
+        return { valid: false, message: "Input contains banned terms." };
+      }
+
+      if (profaneLanguage.some(word => input.includes(word))) {
+        return { valid: true, message: "", profane: true };
+      }
+
+      return { valid: true, message: "" };
+    }
+
+    function handleError(error) {
+      console.error(error);
+      alert("An unexpected error occurred. Please try again.");
+    }
+
+    function calculateGematriaValue(input) {
+      let sum = 0;
+      for (let i = 0; i < input.length; i++) {
+        const charCode = input.toUpperCase().charCodeAt(i);
+        if (charCode >= 65 && charCode <= 90) { // A-Z
+          sum += charCode - 64; // A=1, B=2, ..., Z=26
+        }
+      }
+      return sum;
+    }
+  </script>
+</body>
+</html>
